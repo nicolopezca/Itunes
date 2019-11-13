@@ -12,18 +12,23 @@ class ArtistViewController: UIViewController {
     var album: Album?
     var listaSongs: [Song] = []
     var imagenCancion: UIImage?
+    @IBOutlet weak var tableSongs: UITableView!
+    @IBOutlet weak var imageSong: UIImageView!
+    @IBOutlet weak var titleAlbum: UILabel!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableSongs.dataSource = self
         tableSongs.delegate = self
+        titleAlbum.text = album?.collectionName
         imageSong.image = imagenCancion
         llenarArray()
         // Do any additional setup after loading the view.
     }
     
     
-    @IBOutlet weak var tableSongs: UITableView!
-    @IBOutlet weak var imageSong: UIImageView!
+
     
     func llenarArray(){
         var json: [String: Any] = [:]

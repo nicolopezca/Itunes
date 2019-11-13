@@ -146,9 +146,16 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5gB-FT-ryv">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="193"/>
+                                <rect key="frame" x="0.0" y="66" width="414" height="127"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rwZ-wV-2Oc">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="58"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <viewLayoutGuide key="safeArea" id="BrI-a5-H8Q"/>
@@ -156,6 +163,7 @@
                     <connections>
                         <outlet property="imageSong" destination="5gB-FT-ryv" id="nhF-BV-ehl"/>
                         <outlet property="tableSongs" destination="QrT-N4-lE0" id="EsR-zH-SFg"/>
+                        <outlet property="titleAlbum" destination="rwZ-wV-2Oc" id="ShG-cS-G4U"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ihT-Gz-PpQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

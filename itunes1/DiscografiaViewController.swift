@@ -13,7 +13,6 @@ class ArtistCollectionViewCell: UICollectionViewCell { //cambiar a una clase fue
     @IBOutlet weak var nombreAlbum: UILabel!
     @IBOutlet weak var albumImage: UIImageView!
     @IBOutlet weak var fechaAlbum: UILabel!
-    
 }
 
 class DiscografiaViewController: UIViewController {
