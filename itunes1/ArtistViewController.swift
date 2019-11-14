@@ -15,7 +15,17 @@ class ArtistViewController: UIViewController {
     @IBOutlet weak var tableSongs: UITableView!
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var titleAlbum: UILabel!
+    @IBOutlet weak var genreArtist: UILabel!
+    @IBOutlet weak var priceAlbum: UILabel!
     
+    @IBAction func visitarPagina(_ sender: Any) {
+        guard let album = self.album, let artistUrl = album.artistViewUrl, let url = URL(string: artistUrl) else { return }
+        if #available(iOS 10, *) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            UIApplication.shared.openURL(url)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,20 +33,27 @@ class ArtistViewController: UIViewController {
         tableSongs.delegate = self
         titleAlbum.text = album?.collectionName
         imageSong.image = imagenCancion
+        priceAlbum.text = "\(album!.collectionPrice!)€"
+        genreArtist.text = album?.primaryGenreName
         llenarArray()
-        // Do any additional setup after loading the view.
     }
     
-    
-
     
     func llenarArray(){
         var json: [String: Any] = [:]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
         
         // create post request
-        
-        let url = URL(string: "https://itunes.apple.com/lookup?id=\(album!.collectionId!)&entity=song")!
+        guard
+            let albumId : Int = album?.collectionId
+            else{
+                return
+        }
+        guard
+        let url = URL(string: "https://itunes.apple.com/lookup?id=\(albumId)&entity=song")
+            else{
+                return
+        }
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
@@ -45,7 +62,6 @@ class ArtistViewController: UIViewController {
             print(error?.localizedDescription ?? "No data")
             return
             }
-            
             let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
             if let responseJSON = responseJSON as? [String: Any] {
                 //print(responseJSON)
@@ -53,8 +69,6 @@ class ArtistViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.reloadData(json: json)//llena el array de artistas
                 }
-                
-                
             }
         }
         task.resume()
@@ -69,15 +83,11 @@ class ArtistViewController: UIViewController {
             
             listaSongs = try decoder.decode([Song].self, from: data)
             listaSongs = listaSongs.filter({ $0.trackName != nil }) //si es nulo no lo inserta
-
             //listaSongs = listaSongs.sorted(by: {$0.trackName < $1.trackName}) //ordena el array alfabeticamente
             self.tableSongs.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: true)//utiliza el hilo principal
-            //}
         } catch {
             print("Error: No es posible cargar el json")
-            
         }
- 
     }
 }
 
@@ -86,29 +96,43 @@ extension ArtistViewController: UITableViewDataSource, UITableViewDelegate{
         listaSongs.count
     }
     
-    
+    /*
     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
         let h = seconds / 3600000
-        var x = seconds - h*3600000
+        var x = seconds - h * 3600000
         let m = x / 60000
         x = x - m * 60000
         let s = x / 1000
-      return (h, m, s)
+        return (h, m, s)
     }
+ */
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell:UITableViewCell=UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "mycell")
+        cell.textLabel?.text  = listaSongs[indexPath.row].trackName
+        guard
+            let milisegundos = listaSongs[indexPath.row].trackTimeMillis
+            else{
+                print("milisegundos erroneos")
+                return cell //triple
+        }
+        let date = Date(timeIntervalSince1970: milisegundos / 1000)
+        var calendar = Calendar.current
         
+        calendar.timeZone = TimeZone(abbreviation: "UTC")! // TODO: Remove force unwrap
+        let hours = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        let seconds = calendar.component(.second, from: date)
         
-        
-           cell.textLabel?.text  = listaSongs[indexPath.row].trackName
-        let (h,m,s) = secondsToHoursMinutesSeconds(seconds: listaSongs[indexPath.row].trackTimeMillis!)
-        
-        if(h > 0){
-            cell.detailTextLabel?.text = "Duration: \(h):\(m):\(s)"
+        if(hours > 0){
+            cell.detailTextLabel?.text = "Duration: \(hours):\(minutes):\(seconds)"
+        }
+        else if(minutes > 0){
+            cell.detailTextLabel?.text = "Duration: \(minutes):\(seconds)"
         }
         else{
-        cell.detailTextLabel?.text = "Duration: \(m):\(s)"
+            cell.detailTextLabel?.text = "Duration: \(seconds)"
+
         }
         return cell
     }

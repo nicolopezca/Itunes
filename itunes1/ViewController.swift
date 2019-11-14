@@ -17,6 +17,7 @@ class ViewController: UIViewController{
     var resultsController = UITableViewController()
     var searchController : UISearchController!
     private var lastWritingTime: Date?
+    private var lastWritingText: String?
     var listaArtistas :[Artist] = []
     var artistaSeleccionado : Artist?
     
@@ -29,7 +30,8 @@ class ViewController: UIViewController{
         super.viewDidLoad()
         self.creatingSearhBar()//crear search bar
         self.tableSettings() //crear table view
-        self.checkTimeInSearchBar()
+        //self.checkTimeInSearchBar()
+        self.checkTextInSearchBar()
     }
     
     func reloadData(json: [String: Any]) {
@@ -124,17 +126,33 @@ extension ViewController: UISearchResultsUpdating {
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let text = searchController.searchBar.text, !text.isEmpty else { return }
-        self.lastWritingTime = Date()
+        //self.lastWritingTime = Date()
+        self.lastWritingText = text
     }
     
     //Esta funcion se llama cada dos segundos comprobando si han pasado dos segundos desde la ultima vez que has escrito.
     //La fecha de la ultima vez que has escrito es lastWrittingTime, la fercha actual es Date()
-    
+    /*
     func checkTimeInSearchBar() {
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2) {
             guard let lastWritingTime = self.lastWritingTime, lastWritingTime.addingTimeInterval(2) > Date() else { return self.checkTimeInSearchBar() }
             self.lastWritingTime = nil
             self.checkTimeInSearchBar()
+            DispatchQueue.main.async {
+                self.loadArtists()
+            }
+        }
+    }
+    */
+    
+    //esta funcion comprueba si el texto ha cambiado desde hace dos segundos
+    func checkTextInSearchBar() {
+        DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2) {
+            DispatchQueue.main.async {
+            guard let lastWritingText = self.lastWritingText, lastWritingText != self.searchController.searchBar.text else { return self.checkTextInSearchBar() }
+            self.lastWritingText = nil
+            self.checkTextInSearchBar()
+            }
             DispatchQueue.main.async {
                 self.loadArtists()
             }

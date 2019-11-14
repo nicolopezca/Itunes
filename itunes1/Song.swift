@@ -12,6 +12,6 @@ struct Song: Codable{
     var artistName: String?
     var trackId: Int?
     var collectionId: Int?
-    var trackTimeMillis: Int?
+    var trackTimeMillis: TimeInterval?
     var artistId : Int?
 }

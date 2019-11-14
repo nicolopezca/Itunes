@@ -40,12 +40,21 @@ class DiscografiaViewController: UIViewController {
             listasAlbumes = try decoder.decode([Album].self, from: data)
             listasAlbumes = listasAlbumes.filter({ $0.collectionName != nil }) //si es nulo no lo inserta
             for i in 0..<listasAlbumes.count{
-                let imgUrlStr:String = listasAlbumes[i].artworkUrl100!
+                guard
+                    let imgUrlStr:String = listasAlbumes[i].artworkUrl100
+                    else{
+                        return
+                }
                 if let imgURL = URL.init(string: imgUrlStr) {
                     do {
                         let imageData = try Data(contentsOf: imgURL as URL);
-                        let image = UIImage(data:imageData);
-                        listaImagenes.append(image!)
+                        guard
+                        let image = UIImage(data:imageData)
+                            else{
+                                return
+                        }
+                        listaImagenes.append(image)
+
                     } catch {
                         print("Unable to load data: \(error)")
                     }
@@ -63,7 +72,17 @@ class DiscografiaViewController: UIViewController {
         var json: [String: Any] = [:]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
         // create post request
-        let url = URL(string: "https://itunes.apple.com/lookup?id=\(artista!.artistId)&entity=album")!
+        
+        guard
+            let idArtista: Int = artista?.artistId
+            else{
+                return
+        }
+        guard
+        let url = URL(string: "https://itunes.apple.com/lookup?id=\(idArtista)&entity=album")
+            else{
+                return
+        }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
@@ -73,7 +92,6 @@ class DiscografiaViewController: UIViewController {
             }
             let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
             if let responseJSON = responseJSON as? [String: Any] {
-                //print(responseJSON)
                 json = responseJSON
                 DispatchQueue.main.async {
                     self.reloadData(json: json)//llena el array de artistas
@@ -91,12 +109,18 @@ extension DiscografiaViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! ArtistCollectionViewCell
-        cell.nombreAlbum.text = listasAlbumes[indexPath.item].collectionName
         
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ArtistCollectionViewCell{
+        cell.nombreAlbum.text = listasAlbumes[indexPath.item].collectionName
         cell.fechaAlbum.text = listasAlbumes[indexPath.item].releaseDate
         cell.albumImage.image = listaImagenes[indexPath.item]
         return cell
+        }
+        else{ //triple
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
+        return cell
+        }
+
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

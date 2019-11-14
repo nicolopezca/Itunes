@@ -12,4 +12,7 @@ struct Album: Codable{
     var releaseDate: String?
     var artworkUrl100: String?
     var collectionId: Int?
+    var artistViewUrl: String?
+    var collectionPrice: Double?
+    var primaryGenreName: String?
 }
