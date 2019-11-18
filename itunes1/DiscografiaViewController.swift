@@ -28,7 +28,7 @@ class DiscografiaViewController: UIViewController {
         let decoder = JSONDecoder()
         do {
             let data =  try JSONSerialization.data(withJSONObject: json["results"] as Any,
-                                                   options: JSONSerialization.WritingOptions.prettyPrinted) // convert json to data
+            options: JSONSerialization.WritingOptions.prettyPrinted) // convert json to data
             listasAlbumes = try decoder.decode([Album].self, from: data)
             listasAlbumes = listasAlbumes.filter({ $0.collectionName != nil }) //si es nulo no lo inserta
             for cont in 0..<listasAlbumes.count {
@@ -73,9 +73,10 @@ class DiscografiaViewController: UIViewController {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
-        let task = URLSession.shared.dataTask(with: request) {data, _, error in guard let data = data, error == nil else {
-            print(error?.localizedDescription ?? "No data")
-            return
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                return
             }
             let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
             if let responseJSON = responseJSON as? [String: Any] {

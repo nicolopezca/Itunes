@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         let decoder = JSONDecoder()
         do {
             let data =  try JSONSerialization.data(withJSONObject: json["results"] as Any,
-                                                   options: JSONSerialization.WritingOptions.prettyPrinted) // convert json to data
+                        options: JSONSerialization.WritingOptions.prettyPrinted) // convert json to data
             listaArtistas = try decoder.decode([Artist].self, from: data)
             listaArtistas = listaArtistas.sorted(by: {$0.artistName < $1.artistName}) //ordena el array alfabeticamente
             // self.tabla.reloadData()
@@ -57,9 +57,10 @@ class ViewController: UIViewController {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in guard let data = data, error == nil else {
-            print(error?.localizedDescription ?? "No data")
-            return
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in guard let data = data, error == nil
+            else {
+                print(error?.localizedDescription ?? "No data")
+                return
             }
             let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
             if let responseJSON = responseJSON as? [String: Any] {
@@ -105,12 +106,16 @@ extension ViewController: UISearchResultsUpdating {
         //self.lastWritingTime = Date()
         self.lastWritingText = text
     }
-    //Esta funcion se llama cada dos segundos comprobando si han pasado dos segundos desde la ultima vez que has escrito.
+    //Esta funcion se llama cada dos segundos comprobando
+    //si han pasado dos segundos desde la ultima vez que has escrito.
     //La fecha de la ultima vez que has escrito es lastWrittingTime, la fercha actual es Date()
     /*
      func checkTimeInSearchBar() {
      DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2) {
-     guard let lastWritingTime = self.lastWritingTime, lastWritingTime.addingTimeInterval(2) > Date() else { return self.checkTimeInSearchBar() }
+     guard let lastWritingTime = self.lastWritingTime, lastWritingTime.addingTimeInterval(2) > Date()
+     else {
+     return self.checkTimeInSearchBar()
+     }
      self.lastWritingTime = nil
      self.checkTimeInSearchBar()
      DispatchQueue.main.async {
@@ -123,7 +128,8 @@ extension ViewController: UISearchResultsUpdating {
     func checkTextInSearchBar() {
         DispatchQueue.global().asyncAfter(deadline: DispatchTime.now() + 2) {
             DispatchQueue.main.async {
-                guard let lastWritingText = self.lastWritingText, lastWritingText != self.searchController.searchBar.text
+                guard let lastWritingText = self.lastWritingText,
+                    lastWritingText != self.searchController.searchBar.text
                     else {
                         return self.checkTextInSearchBar()
                 }

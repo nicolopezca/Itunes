@@ -56,9 +56,10 @@ class ArtistViewController: UIViewController {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.httpBody = jsonData
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in guard let data = data, error == nil else {
-            print(error?.localizedDescription ?? "No data")
-            return
+        let task = URLSession.shared.dataTask(with: request) { data, _, error in guard let data = data, error == nil
+            else {
+                print(error?.localizedDescription ?? "No data")
+                return
             }
             let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
             if let responseJSON = responseJSON as? [String: Any] {
@@ -79,7 +80,8 @@ class ArtistViewController: UIViewController {
             listaSongs = try decoder.decode([Song].self, from: data)
             listaSongs = listaSongs.filter({ $0.trackName != nil }) //si es nulo no lo inserta
             //listaSongs = listaSongs.sorted(by: {$0.trackName < $1.trackName}) //ordena el array alfabeticamente
-            self.tableSongs.performSelector(onMainThread: #selector(UITableView.reloadData), with: nil, waitUntilDone: true)
+            self.tableSongs.performSelector(onMainThread:
+                #selector(UITableView.reloadData), with: nil, waitUntilDone: true)
         } catch {
             print("Error: No es posible cargar el json")
         }
