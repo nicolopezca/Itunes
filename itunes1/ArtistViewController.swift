@@ -118,8 +118,13 @@ extension ArtistViewController: UITableViewDataSource, UITableViewDelegate{
         }
         let date = Date(timeIntervalSince1970: milisegundos / 1000)
         var calendar = Calendar.current
-        
-        calendar.timeZone = TimeZone(abbreviation: "UTC")! // TODO: Remove force unwrap
+         
+        guard
+            let timeZone = TimeZone(abbreviation: "UTC") // TODO: Remove force unwrap
+            else{
+                return cell
+        }
+        calendar.timeZone = timeZone
         let hours = calendar.component(.hour, from: date)
         let minutes = calendar.component(.minute, from: date)
         let seconds = calendar.component(.second, from: date)

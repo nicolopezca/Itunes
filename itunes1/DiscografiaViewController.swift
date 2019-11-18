@@ -8,12 +8,6 @@
 
 import UIKit
 
-class ArtistCollectionViewCell: UICollectionViewCell { //cambiar a una clase fuera
-    
-    @IBOutlet weak var nombreAlbum: UILabel!
-    @IBOutlet weak var albumImage: UIImageView!
-    @IBOutlet weak var fechaAlbum: UILabel!
-}
 
 class DiscografiaViewController: UIViewController {
     
@@ -109,10 +103,16 @@ extension DiscografiaViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? ArtistCollectionViewCell{
+            guard
+                let dateAlbum: String = listasAlbumes[indexPath.item].releaseDate
+                else{
+                    return cell
+            }
+            let date = convertDate(fecha: dateAlbum)
+
         cell.nombreAlbum.text = listasAlbumes[indexPath.item].collectionName
-        cell.fechaAlbum.text = listasAlbumes[indexPath.item].releaseDate
+        cell.fechaAlbum.text = date
         cell.albumImage.image = listaImagenes[indexPath.item]
         return cell
         }
@@ -136,6 +136,20 @@ extension DiscografiaViewController: UICollectionViewDelegate, UICollectionViewD
                 vc.album = albumSeleccionado
                 vc.imagenCancion = imagenSeleccionada
             }
+        }
+    }
+    
+    func convertDate(fecha: String)->String{
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+
+        let dateFormatterPrint = DateFormatter()
+        dateFormatterPrint.dateFormat = "MMM dd,yyyy"
+
+        if let date = dateFormatterGet.date(from: fecha) {
+            return dateFormatterPrint.string(from: date)
+        } else {
+          return ("Error")
         }
     }
 }
