@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 class ArtistCollectionViewCell: UICollectionViewCell { //cambiar a una clase fuera
-    
     @IBOutlet weak var nombreAlbum: UILabel!
     @IBOutlet weak var albumImage: UIImageView!
     @IBOutlet weak var fechaAlbum: UILabel!

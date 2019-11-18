@@ -7,7 +7,7 @@
 //
 
 import Foundation
-struct Album: Codable{
+struct Album: Codable {
     var collectionName: String?
     var releaseDate: String?
     var artworkUrl100: String?

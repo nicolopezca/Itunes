@@ -7,13 +7,13 @@
 //
 
 import Foundation
-struct Artist: Codable{
-    var wrapperType : String
-    var artistType : String
-    var artistName : String
-    var artistLinkUrl : String
-    var artistId : Int
-    var amgArtistId : Int?
-    var primaryGenreName : String
-    var primaryGenreId : Int
+struct Artist: Codable {
+    var wrapperType: String
+    var artistType: String
+    var artistName: String
+    var artistLinkUrl: String
+    var artistId: Int
+    var amgArtistId: Int?
+    var primaryGenreName: String
+    var primaryGenreId: Int
 }

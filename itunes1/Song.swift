@@ -7,11 +7,11 @@
 //
 
 import Foundation
-struct Song: Codable{
+struct Song: Codable {
     var trackName: String?
     var artistName: String?
     var trackId: Int?
     var collectionId: Int?
     var trackTimeMillis: TimeInterval?
-    var artistId : Int?
+    var artistId: Int?
 }
