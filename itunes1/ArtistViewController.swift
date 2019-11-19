@@ -38,6 +38,7 @@ class ArtistViewController: UIViewController {
         genreArtist.text = album?.primaryGenreName
         llenarArray()
     }
+    /*
     func llenarArray() {
         var json: [String: Any] = [:]
         let jsonData = try? JSONSerialization.data(withJSONObject: json)
@@ -86,8 +87,39 @@ class ArtistViewController: UIViewController {
             print("Error: No es posible cargar el json")
         }
     }
+ */
+    func llenarArray(){
+        guard
+            let albumId: Int = album?.collectionId
+            else {
+                return
+        }
+        guard
+            let url = URL(string: "https://itunes.apple.com/lookup?id=\(albumId)&entity=song")
+            else
+        {
+            return
+        }
+        URLSession.shared.dataTask(with: url) { (data, response
+                  , error) in
+                  guard let data = data else { return }
+          do {
+              let decoder = JSONDecoder()
+            self.listaSongs = try decoder.decode([Song].self, from: data)
+            self.listaSongs = self.listaSongs.filter({ $0.trackName != nil }) //si es nulo no lo inserta
+
+             // print(gitData.name ?? "Empty Name")
+              
+          } catch let err {
+              print("Err", err)
+          }
+          }.resume()
+}
 }
 
+    
+  
+    
 extension ArtistViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         listaSongs.count
