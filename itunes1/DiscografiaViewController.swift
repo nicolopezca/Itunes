@@ -10,131 +10,160 @@ import UIKit
 
 class DiscografiaViewController: UIViewController {
     @IBOutlet weak var collection: UICollectionView!
-    var listasAlbumes: [Album] = []
-    var artista: Artist?
-    var listaImagenes: [UIImage] = []
-    var albumSeleccionado: Album?
-    var imagenSeleccionada: UIImage?
+    var albumlList: [Album] = []
+    var artist: Artist?
+    var selectedAlbum: Album?
+    var selectedImage: UIImage?
+    @IBOutlet weak var artistName: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        llenarArray()
+        artistName.text = artist?.artistName
+        loadAlbum()
         collection.dataSource = self
         collection.delegate = self
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 100, height: 200)
         collection.collectionViewLayout = layout
     }
-    func reloadData(json: [String: Any]) {
-        let decoder = JSONDecoder()
-        do {
-            let data =  try JSONSerialization.data(withJSONObject: json["results"] as Any,
-            options: JSONSerialization.WritingOptions.prettyPrinted) // convert json to data
-            listasAlbumes = try decoder.decode([Album].self, from: data)
-            listasAlbumes = listasAlbumes.filter({ $0.collectionName != nil }) //si es nulo no lo inserta
-            for cont in 0..<listasAlbumes.count {
-                guard
-                    let imgUrlStr: String = listasAlbumes[cont].artworkUrl100
-                    else {
-                        return
-                }
-                if let imgURL = URL.init(string: imgUrlStr) {
-                    do {
-                        let imageData = try Data(contentsOf: imgURL as URL)
-                        guard
-                            let image = UIImage(data: imageData)
-                            else {
-                                return
-                        }
-                        listaImagenes.append(image)
-                    } catch {
-                        print("Unable to load data: \(error)")
+    func loadImage(url: String) -> UIImage? {
+        if let imgUrlStr: String = url {
+            if let imgURL = URL.init(string: imgUrlStr) {
+                do {
+                    let imageData = try Data(contentsOf: imgURL as URL)
+                    if let image = UIImage(data: imageData) {
+                        return image
                     }
+                } catch {
+                    print("Unable to load data: \(error)")
                 }
             }
-            self.collection.reloadData()
-        } catch {
-            print("Error: No es posible cargar el json")
         }
+        return nil
     }
-    func llenarArray() {
-        var json: [String: Any] = [:]
-        let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        // create post request
+    func loadAlbum() {
         guard
-            let idArtista: Int = artista?.artistId
+            let idArtist = artist?.artistId
+            else {
+                return
+        }
+        let request = AlbumRequest(idArtista: idArtist )
+        request.fetchAlbum { albumListClosure in
+            self.albumlList = albumListClosure
+            self.collection.reloadData()
+        }
+
+        /*
+        guard
+            let idArtista: Int = artist?.artistId
             else {
                 return
         }
         guard
             let url = URL(string: "https://itunes.apple.com/lookup?id=\(idArtista)&entity=album")
-            else {
-                return
+            else
+        {
+            return
         }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in
-            guard let data = data, error == nil else {
-                print(error?.localizedDescription ?? "No data")
-                return
-            }
-            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-            if let responseJSON = responseJSON as? [String: Any] {
-                json = responseJSON
-                DispatchQueue.main.async {
-                    self.reloadData(json: json)//llena el array de artistas
+        URLSession.shared.dataTask(with: url) { (data, response, _) in
+            guard let data = data else { return }
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode(AlbumResponse.self, from: data)
+                self.albumlList = response.results.filter({ $0.collectionName != nil })
+                /*
+                for cont in 0..<self.albumlList.count {
+                    guard
+                        let imgUrlStr: String = self.albumlList[cont].artworkUrl100
+                        else {
+                            return
+                    }
+                    if let imgURL = URL.init(string: imgUrlStr) {
+                        do {
+                            let imageData = try Data(contentsOf: imgURL as URL)
+                            guard
+                                let image = UIImage(data: imageData)
+                                else {
+                                    return
+                            }
+                            self.imageList.append(image)
+                        } catch {
+                            print("Unable to load data: \(error)")
+                        }
+                    }
                 }
+                */
+                DispatchQueue.main.async {
+                    self.collection.reloadData()
+                }
+            } catch let err {
+                print("Err", err)
+            }
+        }.resume()
+            */
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ArtistViewController" {
+            if let vci: ArtistViewController = (segue.destination as? ArtistViewController) {
+                vci.album = selectedAlbum
+                vci.imagenCancion = selectedImage
             }
         }
-        task.resume()
     }
 }
 
 extension DiscografiaViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return listasAlbumes.count
+        return albumlList.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             as? ArtistCollectionViewCell {
+            let set = ArtistCollectionViewCell()
+            //YA NO HAGO NADA CON CELL, DEBERIA HACERLO
+            set.setup(selectedAlbum: albumlList[indexPath.item], cellAlbum: cell)
+            return cell
+            /*
             guard
-                let dateAlbum: String = listasAlbumes[indexPath.item].releaseDate
+                let dateAlbum: String = albumlList[indexPath.item].releaseDate
                 else {
                     return cell
             }
             let date = convertDate(fecha: dateAlbum)
-            cell.nombreAlbum.text = listasAlbumes[indexPath.item].collectionName
+            cell.nombreAlbum.text = albumlList[indexPath.item].collectionName
             cell.fechaAlbum.text = date
-            cell.albumImage.image = listaImagenes[indexPath.item]
+            guard
+            let auxRute: String = albumlList[indexPath.item].artworkUrl100
+            else {
+                return cell
+            }
+            guard
+                let image: UIImage = loadImage(url: auxRute)
+                else {
+                    return cell
+            }
+            cell.albumImage.image = image
             return cell
-        } else { //triple
+ */
+        } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             return cell
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collection.deselectItem(at: indexPath, animated: true)
-        albumSeleccionado = listasAlbumes[indexPath.row]
-        imagenSeleccionada = listaImagenes[indexPath.row]
+        selectedAlbum = albumlList[indexPath.row]
+        guard
+        let auxRute: String = albumlList[indexPath.row].artworkUrl100
+        else {
+            return
+        }
+        guard
+            let image: UIImage = loadImage(url: auxRute)
+            else {
+                return
+        }
+        selectedImage = image
         performSegue(withIdentifier: "ArtistViewController", sender: self)
     }
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ArtistViewController" {
-            if let vci: ArtistViewController = (segue.destination as? ArtistViewController) {
-                vci.album = albumSeleccionado
-                vci.imagenCancion = imagenSeleccionada
-            }
-        }
-    }
-    func convertDate(fecha: String) -> String {
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let dateFormatterPrint = DateFormatter()
-        dateFormatterPrint.dateFormat = "MMM dd,yyyy"
-        if let date = dateFormatterGet.date(from: fecha) {
-            return dateFormatterPrint.string(from: date)
-        } else {
-            return ("Error")
-        }
-    }
+
 }

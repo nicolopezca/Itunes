@@ -17,5 +17,3 @@ struct Artist: Codable {
     var primaryGenreName: String
     var primaryGenreId: Int
 }
-
-

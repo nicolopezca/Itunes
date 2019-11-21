@@ -21,6 +21,8 @@
 		9032A6EB23717231005A023F /* itunes1Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032A6EA23717231005A023F /* itunes1Tests.swift */; };
 		9032A6F623717231005A023F /* itunes1UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9032A6F523717231005A023F /* itunes1UITests.swift */; };
 		9035068A238295C400CE1507 /* ArtistCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90350689238295C400CE1507 /* ArtistCollectionViewCell.swift */; };
+		90F8B89D238555A800A346C9 /* Red.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90F8B89C238555A800A346C9 /* Red.swift */; };
+		90FE95B72383F49C00E5B0B1 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FE95B62383F49C00E5B0B1 /* Response.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		9032A6F523717231005A023F /* itunes1UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = itunes1UITests.swift; sourceTree = "<group>"; };
 		9032A6F723717231005A023F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90350689238295C400CE1507 /* ArtistCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistCollectionViewCell.swift; sourceTree = "<group>"; };
+		90F8B89C238555A800A346C9 /* Red.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Red.swift; sourceTree = "<group>"; };
+		90FE95B62383F49C00E5B0B1 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +128,8 @@
 				902DE3FF23758E31007D247B /* Album.swift */,
 				9032392E237ADF1500219499 /* Song.swift */,
 				90350689238295C400CE1507 /* ArtistCollectionViewCell.swift */,
+				90FE95B62383F49C00E5B0B1 /* Response.swift */,
+				90F8B89C238555A800A346C9 /* Red.swift */,
 			);
 			path = itunes1;
 			sourceTree = "<group>";
@@ -305,8 +311,10 @@
 				9032392D237ACD9300219499 /* ArtistViewController.swift in Sources */,
 				9032392F237ADF1500219499 /* Song.swift in Sources */,
 				9035068A238295C400CE1507 /* ArtistCollectionViewCell.swift in Sources */,
+				90F8B89D238555A800A346C9 /* Red.swift in Sources */,
 				902DE3FE23756BC5007D247B /* Artist.swift in Sources */,
 				9032A6D62371722D005A023F /* SceneDelegate.swift in Sources */,
+				90FE95B72383F49C00E5B0B1 /* Response.swift in Sources */,
 				902DE40023758E31007D247B /* Album.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
