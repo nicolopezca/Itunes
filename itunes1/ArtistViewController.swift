@@ -11,13 +11,15 @@ import UIKit
 class ArtistViewController: UIViewController {
     var album: Album?
     var songList: [Song] = []
-    var imagenCancion: UIImage?
+    var songImage: UIImage?
+
     @IBOutlet weak var tableSongs: UITableView!
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var titleAlbum: UILabel!
+    @IBOutlet weak var vSpinner: UIActivityIndicatorView!
     @IBOutlet weak var genreArtist: UILabel!
     @IBOutlet weak var priceAlbum: UILabel!
-    @IBAction func visitarPagina(_ sender: Any) {
+    @IBAction func visitPage(_ sender: Any) {
         guard let album = self.album, let artistUrl = album.artistViewUrl, let url = URL(string: artistUrl)
             else {
                 return
@@ -29,11 +31,15 @@ class ArtistViewController: UIViewController {
         }
     }
     override func viewDidLoad() {
+        vSpinner.hidesWhenStopped = true
+        vSpinner.style = UIActivityIndicatorView.Style.medium
+        self.view.addSubview(vSpinner)
         super.viewDidLoad()
         tableSongs.dataSource = self
         tableSongs.delegate = self
         titleAlbum.text = album?.collectionName
-        imageSong.image = imagenCancion
+        imageSong.image = songImage
+        loadImage(url: album?.artworkUrl100)
         guard
         let aux: Double = album?.collectionPrice
         else {
@@ -42,6 +48,19 @@ class ArtistViewController: UIViewController {
         priceAlbum.text = "\(aux)€"
         genreArtist.text = album?.primaryGenreName
         loadSongs()
+    }
+    func loadImage(url: String?) {
+        guard
+            let rute = url
+            else {
+                return
+        }
+        vSpinner.startAnimating()
+        let request = ImageAPI(url: rute )
+        request.download { image in
+            self.vSpinner.stopAnimating()
+            self.imageSong.image = image
+        }
     }
     func loadSongs() {
         guard

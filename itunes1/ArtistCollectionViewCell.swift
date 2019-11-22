@@ -8,31 +8,26 @@
 
 import Foundation
 import UIKit
-class ArtistCollectionViewCell: UICollectionViewCell { //cambiar a una clase fuera
-    @IBOutlet weak var nombreAlbum: UILabel!
-    @IBOutlet weak var albumImage: UIImageView!
-    @IBOutlet weak var fechaAlbum: UILabel!
-    func setup(selectedAlbum: Album, cellAlbum: ArtistCollectionViewCell) -> ArtistCollectionViewCell? {
+class ArtistCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var imageAlbum: UIImageView!
+    @IBOutlet weak var albumName: UILabel!
+    @IBOutlet weak var albumDate: UILabel!
+    func setup(selectedAlbum: Album) {
         guard
             let dateAlbum: String = selectedAlbum.releaseDate
             else {
-                return nil
+                return
         }
         let date = convertDate(fecha: dateAlbum)
-        cellAlbum.nombreAlbum.text = selectedAlbum.collectionName
-        cellAlbum.fechaAlbum.text = date
+        self.albumName.text = selectedAlbum.collectionName
+        self.albumDate.text = date
+        
         guard
         let auxRute: String = selectedAlbum.artworkUrl100
         else {
-            return nil
+            return
         }
-        guard
-            let image: UIImage = loadImage(url: auxRute)
-            else {
-                return nil
-        }
-        cellAlbum.albumImage.image = image
-        return cellAlbum
+            loadImage(url: auxRute)
     }
     func convertDate(fecha: String) -> String {
         let dateFormatterGet = DateFormatter()
@@ -45,19 +40,15 @@ class ArtistCollectionViewCell: UICollectionViewCell { //cambiar a una clase fue
             return ("Error")
         }
     }
-    func loadImage(url: String) -> UIImage? {
-        if let imgUrlStr: String = url {
-            if let imgURL = URL.init(string: imgUrlStr) {
-                do {
-                    let imageData = try Data(contentsOf: imgURL as URL)
-                    if let image = UIImage(data: imageData) {
-                        return image
-                    }
-                } catch {
-                    print("Unable to load data: \(error)")
-                }
-            }
+    func loadImage(url: String?) {
+        guard
+            let rute = url
+            else {
+                return 
         }
-        return nil
+        let request = ImageAPI(url: rute )
+        request.download { image in
+            self.imageAlbum.image = image
+        }
     }
 }

@@ -29,30 +29,6 @@ class ViewController: UIViewController {
             self.artistList = artits
             self.tabla.reloadData()
         }
-        /*
-        guard
-            let term = self.searchBar.text?.lowercased(),
-            let url = URL(string: "https://itunes.apple.com/search?media=music&entity=musicArtist&term=\(term)&limit=10&offset=0&lang=en")
-            else
-        {
-            return
-        }
-        URLSession.shared.dataTask(with: url) { (data, response, _) in
-            guard let data = data else { return }
-
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(ArtistsResponse.self, from: data)
-                self.artistList = response.results
-                self.artistList = self.artistList.sorted(by: {$0.artistName < $1.artistName})
-                DispatchQueue.main.async {
-                    self.tabla.reloadData()
-                }
-            } catch let err {
-                print("Err", err)
-            }
-        }.resume()
- */
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DiscografiaViewController"{
@@ -117,5 +93,3 @@ extension ViewController: UISearchBarDelegate {
         self.lastWritingText = searchText
     }
 }
-
-

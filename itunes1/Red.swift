@@ -9,9 +9,6 @@
 import Foundation
 import UIKit
 
-//class searchController: UISearchBar {
-//
-//    }
 class API {
     let url: String
     init(url: String) {
@@ -20,6 +17,28 @@ class API {
     func performRequest(_ completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
         guard let url = URL(string: self.url) else { return }
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+}
+
+class ImageAPI {
+    
+    let url: String
+    init(url: String) {
+        self.url = url
+    }
+    func download(_ completion: @escaping (UIImage?) -> Void) {
+        DispatchQueue.global().async {
+            if let imgURL = URL(string: self.url) {
+                do {
+                    let imageData = try Data(contentsOf: imgURL as URL)
+                    DispatchQueue.main.async {
+                        completion(UIImage(data: imageData))
+                    }
+                } catch {
+                    print("Unable to load data: \(error)")
+                }
+            }
+        }
     }
 }
 
