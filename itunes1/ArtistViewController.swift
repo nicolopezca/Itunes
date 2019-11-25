@@ -12,7 +12,7 @@ class ArtistViewController: UIViewController {
     var album: Album?
     var songList: [Song] = []
     var songImage: UIImage?
-
+    
     @IBOutlet weak var tableSongs: UITableView!
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var titleAlbum: UILabel!
@@ -41,9 +41,9 @@ class ArtistViewController: UIViewController {
         imageSong.image = songImage
         loadImage(url: album?.artworkUrl100)
         guard
-        let aux: Double = album?.collectionPrice
-        else {
-            return
+            let aux: Double = album?.collectionPrice
+            else {
+                return
         }
         priceAlbum.text = "\(aux)€"
         genreArtist.text = album?.primaryGenreName
@@ -74,7 +74,7 @@ class ArtistViewController: UIViewController {
             self.tableSongs.reloadData()
         }
     }
-
+    
 }
 
 extension ArtistViewController: UITableViewDataSource, UITableViewDelegate {

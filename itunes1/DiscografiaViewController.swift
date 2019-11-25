@@ -25,8 +25,7 @@ class DiscografiaViewController: UIViewController {
         layout.itemSize = CGSize(width: 100, height: 200)
         collection.collectionViewLayout = layout
     }
-
-    func loadAlbum() {
+        func loadAlbum() {
         guard
             let idArtist = artist?.artistId
             else {

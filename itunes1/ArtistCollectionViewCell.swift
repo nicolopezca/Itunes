@@ -9,10 +9,17 @@
 import Foundation
 import UIKit
 class ArtistCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var imageAlbum: UIImageView!
+    @IBOutlet weak var dSpinner: UIActivityIndicatorView!
+    @IBOutlet weak var imageAlbum: UrlImageView!
     @IBOutlet weak var albumName: UILabel!
     @IBOutlet weak var albumDate: UILabel!
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageAlbum.image = nil
+    }
     func setup(selectedAlbum: Album) {
+        dSpinner.hidesWhenStopped = true
+        dSpinner.style = UIActivityIndicatorView.Style.medium
         guard
             let dateAlbum: String = selectedAlbum.releaseDate
             else {
@@ -21,13 +28,12 @@ class ArtistCollectionViewCell: UICollectionViewCell {
         let date = convertDate(fecha: dateAlbum)
         self.albumName.text = selectedAlbum.collectionName
         self.albumDate.text = date
-        
         guard
-        let auxRute: String = selectedAlbum.artworkUrl100
-        else {
-            return
+            let auxRute: String = selectedAlbum.artworkUrl100
+            else {
+                return
         }
-            loadImage(url: auxRute)
+        loadImage(url: auxRute)
     }
     func convertDate(fecha: String) -> String {
         let dateFormatterGet = DateFormatter()
@@ -42,13 +48,10 @@ class ArtistCollectionViewCell: UICollectionViewCell {
     }
     func loadImage(url: String?) {
         guard
-            let rute = url
+            let rute = url?.replacingOccurrences(of: "100x100", with: "1024x1024")
             else {
-                return 
+                return
         }
-        let request = ImageAPI(url: rute )
-        request.download { image in
-            self.imageAlbum.image = image
-        }
+        imageAlbum.setImage(with: rute, with: dSpinner)
     }
 }

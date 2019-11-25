@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gqS-x9-HOg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gqS-x9-HOg">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -42,7 +42,7 @@
                     <navigationItem key="navigationItem" id="DkO-kZ-gsh"/>
                     <connections>
                         <outlet property="searchBar" destination="pqr-6F-j9U" id="FVr-es-fXy"/>
-                        <outlet property="tabla" destination="BVe-L6-B9k" id="4Fg-BI-1tV"/>
+                        <outlet property="table" destination="BVe-L6-B9k" id="lil-ox-5al"/>
                         <segue destination="mla-zw-DqK" kind="showDetail" identifier="DiscografiaViewController" id="xZk-ME-2EB"/>
                     </connections>
                 </viewController>
@@ -76,7 +76,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="173" height="251"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X42-3k-eIt">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X42-3k-eIt" customClass="UrlImageView" customModule="itunes1" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="173" height="207.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="Iq6-L1-1xM"/>
@@ -97,14 +97,19 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mS9-AY-b9m">
+                                                    <rect key="frame" x="76" y="93" width="21" height="20"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="npq-gP-iGX" firstAttribute="leading" secondItem="XnL-g8-oQO" secondAttribute="leading" id="Dzo-Q1-ycE"/>
                                                 <constraint firstAttribute="trailing" secondItem="X42-3k-eIt" secondAttribute="trailing" id="ESv-9p-odB"/>
                                                 <constraint firstItem="npq-gP-iGX" firstAttribute="top" secondItem="Kzi-e5-KeY" secondAttribute="bottom" constant="1" id="GTx-gW-vtV"/>
+                                                <constraint firstItem="mS9-AY-b9m" firstAttribute="leading" secondItem="X42-3k-eIt" secondAttribute="trailing" constant="-97" id="SYY-z5-Fdb"/>
                                                 <constraint firstItem="Kzi-e5-KeY" firstAttribute="leading" secondItem="XnL-g8-oQO" secondAttribute="leading" id="Wyo-dh-POb"/>
                                                 <constraint firstItem="X42-3k-eIt" firstAttribute="leading" secondItem="XnL-g8-oQO" secondAttribute="leading" id="XXR-IN-yss"/>
                                                 <constraint firstItem="Kzi-e5-KeY" firstAttribute="top" secondItem="X42-3k-eIt" secondAttribute="bottom" constant="1" id="aUv-M9-Ibw"/>
+                                                <constraint firstItem="X42-3k-eIt" firstAttribute="top" secondItem="mS9-AY-b9m" secondAttribute="bottom" constant="-113" id="c69-1y-aOv"/>
                                                 <constraint firstAttribute="bottom" secondItem="npq-gP-iGX" secondAttribute="bottom" id="j8D-pB-s5T"/>
                                                 <constraint firstAttribute="trailing" secondItem="npq-gP-iGX" secondAttribute="trailing" id="p0x-oW-kp8"/>
                                                 <constraint firstItem="npq-gP-iGX" firstAttribute="top" secondItem="Kzi-e5-KeY" secondAttribute="bottom" constant="1" id="pEn-E0-Z5E"/>
@@ -118,6 +123,7 @@
                                         <connections>
                                             <outlet property="albumDate" destination="npq-gP-iGX" id="w2s-1N-9Hu"/>
                                             <outlet property="albumName" destination="Kzi-e5-KeY" id="nmL-E7-DLX"/>
+                                            <outlet property="dSpinner" destination="mS9-AY-b9m" id="HNg-op-aWB"/>
                                             <outlet property="imageAlbum" destination="X42-3k-eIt" id="SHK-83-6nt"/>
                                         </connections>
                                     </collectionViewCell>
@@ -224,7 +230,7 @@
                         <outlet property="priceAlbum" destination="THl-NN-SFt" id="Ghm-DG-eqs"/>
                         <outlet property="tableSongs" destination="QrT-N4-lE0" id="EsR-zH-SFg"/>
                         <outlet property="titleAlbum" destination="rwZ-wV-2Oc" id="ShG-cS-G4U"/>
-                        <outlet property="vSpinner" destination="4cL-FP-xnX" id="PL5-4x-OkC"/>
+                        <outlet property="vSpinner" destination="4cL-FP-xnX" id="CJd-ch-lys"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ihT-Gz-PpQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

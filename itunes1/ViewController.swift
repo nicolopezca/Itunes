@@ -9,25 +9,23 @@
 import UIKit
 import Foundation
 class ViewController: UIViewController {
-    @IBOutlet weak var tabla: UITableView!
+    @IBOutlet weak var table: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
     private var lastWritingTime: Date?
     private var lastWritingText: String?
     var artistList: [Artist] = []
     var selectedArtist: Artist?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         self.creatingSearhBar()
         self.tableSettings()
         self.checkTextInSearchBar()
     }
-
     func loadArtists() {
         let request = ArtistRequest(term: self.searchBar.text?.lowercased() ?? "")
         request.fetchArtist { artits in
             self.artistList = artits
-            self.tabla.reloadData()
+            self.table.reloadData()
         }
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -82,8 +80,8 @@ extension ViewController: UISearchResultsUpdating {
         self.searchBar.delegate = self
     }
     func tableSettings() {
-        self.tabla.dataSource = self
-        self.tabla.delegate = self
+        self.table.dataSource = self
+        self.table.delegate = self
     }
 }
 
