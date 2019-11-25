@@ -12,7 +12,6 @@ class ArtistViewController: UIViewController {
     var album: Album?
     var songList: [Song] = []
     var songImage: UIImage?
-    
     @IBOutlet weak var tableSongs: UITableView!
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var titleAlbum: UILabel!
@@ -74,7 +73,6 @@ class ArtistViewController: UIViewController {
             self.tableSongs.reloadData()
         }
     }
-    
 }
 
 extension ArtistViewController: UITableViewDataSource, UITableViewDelegate {

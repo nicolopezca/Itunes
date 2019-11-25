@@ -22,7 +22,7 @@ class DiscografiaViewController: UIViewController {
         collection.dataSource = self
         collection.delegate = self
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 100, height: 200)
+        layout.itemSize = CGSize(width: 200, height: 200)
         collection.collectionViewLayout = layout
     }
         func loadAlbum() {

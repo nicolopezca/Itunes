@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class UrlImageView: UIImageView  {
+final class UrlImageView: UIImageView {
     private var url: String?
     func setImage(with url: String, with spinner: UIActivityIndicatorView) {
         self.url = url

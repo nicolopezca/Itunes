@@ -28,7 +28,6 @@ class ImageAPI {
     }
     func download(_ completion: @escaping (UIImage?) -> Void) {
         DispatchQueue.global().async {
-            
             if let imgURL = URL(string: self.url) {
                 do {
                     let imageData = try Data(contentsOf: imgURL as URL)

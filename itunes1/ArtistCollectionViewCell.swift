@@ -48,7 +48,7 @@ class ArtistCollectionViewCell: UICollectionViewCell {
     }
     func loadImage(url: String?) {
         guard
-            let rute = url?.replacingOccurrences(of: "100x100", with: "1024x1024")
+            let rute = url
             else {
                 return
         }
