@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gqS-x9-HOg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="gqS-x9-HOg">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -17,18 +17,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BVe-L6-B9k">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="132" width="414" height="764"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="bhJ-EL-PtU"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="5VN-uU-pVk"/>
                                 </connections>
                             </tableView>
+                            <searchBar contentMode="redraw" id="pqr-6F-j9U">
+                                <rect key="frame" x="0.0" y="88" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="BVe-L6-B9k" firstAttribute="top" secondItem="pqr-6F-j9U" secondAttribute="bottom" id="583-Dx-wLm"/>
                             <constraint firstItem="BVe-L6-B9k" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="QyG-n8-Nbz"/>
-                            <constraint firstItem="BVe-L6-B9k" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="WPa-Fr-Rgj"/>
                             <constraint firstAttribute="bottom" secondItem="BVe-L6-B9k" secondAttribute="bottom" id="hFu-pB-3bh"/>
                             <constraint firstItem="BVe-L6-B9k" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="oAG-9v-kTn"/>
                         </constraints>
@@ -36,7 +41,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="DkO-kZ-gsh"/>
                     <connections>
-                        <outlet property="tabla" destination="BVe-L6-B9k" id="4Fg-BI-1tV"/>
+                        <outlet property="searchBar" destination="pqr-6F-j9U" id="FVr-es-fXy"/>
+                        <outlet property="table" destination="BVe-L6-B9k" id="lil-ox-5al"/>
                         <segue destination="mla-zw-DqK" kind="showDetail" identifier="DiscografiaViewController" id="xZk-ME-2EB"/>
                     </connections>
                 </viewController>
@@ -70,7 +76,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="173" height="251"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X42-3k-eIt">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X42-3k-eIt" customClass="UrlImageView" customModule="itunes1" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="173" height="207.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="Iq6-L1-1xM"/>
@@ -91,6 +97,10 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mS9-AY-b9m">
+                                                    <rect key="frame" x="76" y="93" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="npq-gP-iGX" firstAttribute="leading" secondItem="XnL-g8-oQO" secondAttribute="leading" id="Dzo-Q1-ycE"/>
@@ -110,20 +120,33 @@
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="173" height="251"/>
                                         <connections>
-                                            <outlet property="albumImage" destination="X42-3k-eIt" id="ScG-VQ-Ji0"/>
-                                            <outlet property="fechaAlbum" destination="Kzi-e5-KeY" id="lZm-9M-dkC"/>
-                                            <outlet property="nombreAlbum" destination="npq-gP-iGX" id="0uC-Gs-vag"/>
+                                            <outlet property="albumDate" destination="npq-gP-iGX" id="w2s-1N-9Hu"/>
+                                            <outlet property="albumName" destination="Kzi-e5-KeY" id="nmL-E7-DLX"/>
+                                            <outlet property="dSpinner" destination="mS9-AY-b9m" id="HNg-op-aWB"/>
+                                            <outlet property="imageAlbum" destination="X42-3k-eIt" id="SHK-83-6nt"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sbE-cI-JYo">
+                                <rect key="frame" x="108" y="20" width="198" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <accessibility key="accessibilityConfiguration" identifier="DiscografiaController"/>
+                        <constraints>
+                            <constraint firstItem="sbE-cI-JYo" firstAttribute="top" secondItem="TK7-lW-vhI" secondAttribute="top" constant="20" id="6V7-tg-uXa"/>
+                            <constraint firstItem="sbE-cI-JYo" firstAttribute="leading" secondItem="TK7-lW-vhI" secondAttribute="leading" constant="108" id="Je9-Gz-x9d"/>
+                            <constraint firstItem="TK7-lW-vhI" firstAttribute="trailing" secondItem="sbE-cI-JYo" secondAttribute="trailing" constant="108" id="jKX-mp-vyA"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="TK7-lW-vhI"/>
                     </view>
                     <navigationItem key="navigationItem" id="FkI-ex-T3Y"/>
                     <connections>
+                        <outlet property="artistName" destination="sbE-cI-JYo" id="6RN-v0-tb3"/>
                         <outlet property="collection" destination="TJC-wQ-3pg" id="ZON-4d-acc"/>
                         <segue destination="fIh-7Q-f9d" kind="showDetail" identifier="ArtistViewController" id="bQ8-c9-mfV"/>
                     </connections>
@@ -166,7 +189,7 @@
                                 <rect key="frame" x="124" y="168.5" width="166" height="30"/>
                                 <state key="normal" title="Página del artista"/>
                                 <connections>
-                                    <action selector="visitarPagina:" destination="fIh-7Q-f9d" eventType="touchUpInside" id="mL2-ky-RBh"/>
+                                    <action selector="visitPage:" destination="fIh-7Q-f9d" eventType="touchUpInside" id="bJD-Ke-He3"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EL1-vm-fnY">
@@ -175,6 +198,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="4cL-FP-xnX">
+                                <rect key="frame" x="197" y="82" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -206,11 +233,12 @@
                         <outlet property="priceAlbum" destination="THl-NN-SFt" id="Ghm-DG-eqs"/>
                         <outlet property="tableSongs" destination="QrT-N4-lE0" id="EsR-zH-SFg"/>
                         <outlet property="titleAlbum" destination="rwZ-wV-2Oc" id="ShG-cS-G4U"/>
+                        <outlet property="vSpinner" destination="4cL-FP-xnX" id="CJd-ch-lys"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ihT-Gz-PpQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2471.0144927536235" y="1.3392857142857142"/>
+            <point key="canvasLocation" x="2304" y="3"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="GmF-05-r6V">

@@ -10,14 +10,15 @@ import UIKit
 
 class ArtistViewController: UIViewController {
     var album: Album?
-    var listaSongs: [Song] = []
-    var imagenCancion: UIImage?
+    var songList: [Song] = []
+    var songImage: UIImage?
     @IBOutlet weak var tableSongs: UITableView!
     @IBOutlet weak var imageSong: UIImageView!
     @IBOutlet weak var titleAlbum: UILabel!
+    @IBOutlet weak var vSpinner: UIActivityIndicatorView!
     @IBOutlet weak var genreArtist: UILabel!
     @IBOutlet weak var priceAlbum: UILabel!
-    @IBAction func visitarPagina(_ sender: Any) {
+    @IBAction func visitPage(_ sender: Any) {
         guard let album = self.album, let artistUrl = album.artistViewUrl, let url = URL(string: artistUrl)
             else {
                 return
@@ -29,87 +30,63 @@ class ArtistViewController: UIViewController {
         }
     }
     override func viewDidLoad() {
+        vSpinner.hidesWhenStopped = true
+        vSpinner.style = UIActivityIndicatorView.Style.medium
+        self.view.addSubview(vSpinner)
         super.viewDidLoad()
         tableSongs.dataSource = self
         tableSongs.delegate = self
         titleAlbum.text = album?.collectionName
-        imageSong.image = imagenCancion
-        priceAlbum.text = "\(album!.collectionPrice!)€"
+        imageSong.image = songImage
+        loadImage(url: album?.artworkUrl100)
+        guard
+            let aux: Double = album?.collectionPrice
+            else {
+                return
+        }
+        priceAlbum.text = "\(aux)€"
         genreArtist.text = album?.primaryGenreName
-        llenarArray()
+        loadSongs()
     }
-    func llenarArray() {
-        var json: [String: Any] = [:]
-        let jsonData = try? JSONSerialization.data(withJSONObject: json)
-        // create post request
+    func loadImage(url: String?) {
         guard
-            let albumId: Int = album?.collectionId
+            let rute = url
             else {
                 return
         }
-        guard
-            let url = URL(string: "https://itunes.apple.com/lookup?id=\(albumId)&entity=song")
-            else
-        {
-            return
+        vSpinner.startAnimating()
+        let request = ImageAPI(url: rute )
+        request.download { image in
+            self.vSpinner.stopAnimating()
+            self.imageSong.image = image
         }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        let task = URLSession.shared.dataTask(with: request) { data, _, error in guard let data = data, error == nil
-            else {
-                print(error?.localizedDescription ?? "No data")
-                return
-            }
-            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
-            if let responseJSON = responseJSON as? [String: Any] {
-                //print(responseJSON)
-                json = responseJSON
-                DispatchQueue.main.async {
-                    self.reloadData(json: json)//llena el array de artistas
-                }
-            }
-        }
-        task.resume()
     }
-    func reloadData(json: [String: Any]) {
-        let decoder = JSONDecoder()
-        do {
-            let data =  try JSONSerialization.data(withJSONObject: json["results"]
-                as Any, options: JSONSerialization.WritingOptions.prettyPrinted) // convert json to data
-            listaSongs = try decoder.decode([Song].self, from: data)
-            listaSongs = listaSongs.filter({ $0.trackName != nil }) //si es nulo no lo inserta
-            //listaSongs = listaSongs.sorted(by: {$0.trackName < $1.trackName}) //ordena el array alfabeticamente
-            self.tableSongs.performSelector(onMainThread:
-                #selector(UITableView.reloadData), with: nil, waitUntilDone: true)
-        } catch {
-            print("Error: No es posible cargar el json")
+    func loadSongs() {
+        guard
+            let idAlbum = album?.collectionId
+            else {
+                return
+        }
+        let request = SongRequest(albumId: idAlbum)
+        request.fetchSong { songListClosure in
+            self.songList = songListClosure
+            self.tableSongs.reloadData()
         }
     }
 }
 
 extension ArtistViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        listaSongs.count
+        songList.count
     }
-    /*
-     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
-     let h = seconds / 3600000
-     var x = seconds - h * 3600000
-     let m = x / 60000
-     x = x - m * 60000
-     let s = x / 1000
-     return (h, m, s)
-     }
-     */
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell=UITableViewCell(style: UITableViewCell.CellStyle.subtitle, reuseIdentifier: "mycell")
-        cell.textLabel?.text  = listaSongs[indexPath.row].trackName
+        cell.textLabel?.text  = songList[indexPath.row].trackName
         guard
-            let milisegundos = listaSongs[indexPath.row].trackTimeMillis
+            let milisegundos = songList[indexPath.row].trackTimeMillis
             else {
                 print("milisegundos erroneos")
-                return cell //triple
+                return cell
         }
         let date = Date(timeIntervalSince1970: milisegundos / 1000)
         var calendar = Calendar.current
